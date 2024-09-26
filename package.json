@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@flaticon/flaticon-uicons": "^3.3.1",
+    "@next/font": "^14.2.13",
     "next": "14.2.13",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "uicon": "^2.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.16.7",
