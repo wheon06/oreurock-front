@@ -12,7 +12,9 @@
     "@flaticon/flaticon-uicons": "^3.3.1",
     "@next/font": "^14.2.13",
     "@nextui-org/input": "^2.2.5",
+    "@nextui-org/react": "^2.4.8",
     "next": "14.2.13",
+    "next-themes": "^0.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "uicon": "^2.0.1"

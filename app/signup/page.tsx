@@ -1,29 +1,22 @@
 'use client';
 
 import {
+  Button,
   Input,
   Modal,
-  ModalContent,
-  ModalHeader,
   ModalBody,
+  ModalContent,
   ModalFooter,
-  Button,
+  ModalHeader,
   useDisclosure,
 } from '@nextui-org/react';
 import React, { useState } from 'react';
 import {
-  Activity,
-  AlignTopBoldIcon,
-  AnchorIcon,
   AvatarIcon,
   CalendarBoldIcon,
   EditIcon,
-  EllipsisIcon,
   EyeFilledIcon,
   EyeSlashFilledIcon,
-  HeadphonesIcon,
-  InfoIcon,
-  MoonIcon,
   SendFilledIcon,
 } from '@nextui-org/shared-icons';
 import { Gugi } from 'next/font/google';
@@ -34,6 +27,7 @@ const gugi = Gugi({
 });
 
 export default function SignUp() {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPasswordAgainVisible, setIsPasswordAgainVisible] = useState(false);
@@ -45,6 +39,7 @@ export default function SignUp() {
 
   const handleChangeUsername = (username: string) => {
     // 4~12 자리, 최소 하나의 영문자와 하나의 숫자 포함
+    setUsername(username);
     const usernameRegex = /^(?=.*[A-Za-z])(?=.*\d).{4,12}$/;
     setIsUsernameInvalid(!usernameRegex.test(username));
   };
@@ -139,7 +134,7 @@ export default function SignUp() {
           />
         </div>
         <Button color='primary' onClick={handleSignUpSubmit}>
-          회원가입
+          다음
         </Button>
         <div className='border-lightGray/30 my-[1%] w-full border-[1px]'></div>
         <div className='flex justify-end'>
@@ -148,17 +143,54 @@ export default function SignUp() {
           </a>
         </div>
       </div>
-      <ModalDetail isOpen={isOpen} onOpenChange={onOpenChange} />
+      <ModalDetail
+        username={username}
+        password={password}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      />
     </div>
   );
 }
 
-const ModalDetail = ({ isOpen, onOpenChange }) => {
+interface ModalDetailProps {
+  username: string;
+  password: string;
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+}
+
+const ModalDetail = ({
+  username,
+  password,
+  isOpen,
+  onOpenChange,
+}: ModalDetailProps) => {
   const [isPhoneInvalid, setIsPhoneInvalid] = useState(false);
+  const [isBirthdayInvalid, setIsBirthdayInvalid] = useState(false);
+  const [isFirstDateInvalid, setIsFirstDateInvalid] = useState(false);
 
   const handleChangePhone = (phone: string) => {
     const phoneRegex = /^010\d{8}$/;
     setIsPhoneInvalid(!phoneRegex.test(phone));
+  };
+
+  const handleChangeBirthday = (birthday: string) => {
+    const birthdayRegex = /^\d{8}$/;
+    setIsBirthdayInvalid(!birthdayRegex.test(birthday));
+  };
+
+  const handleChangeFirstDate = (firstDate: string) => {
+    if (firstDate === '') {
+      setIsFirstDateInvalid(false);
+      return;
+    }
+    const firstDateRegex = /^\d{8}$/;
+    setIsFirstDateInvalid(!firstDateRegex.test(firstDate));
+  };
+
+  const handleModalSubmit = () => {
+    //todo 백엔드 가입 페칭
   };
 
   return (
@@ -177,6 +209,7 @@ const ModalDetail = ({ isOpen, onOpenChange }) => {
                     fullWidth
                     placeholder='이름'
                     startContent={<AvatarIcon className='text-black/50' />}
+                    className='mb-2'
                   />
                   <Input
                     type='number'
@@ -194,21 +227,29 @@ const ModalDetail = ({ isOpen, onOpenChange }) => {
                     startContent={
                       <CalendarBoldIcon className='text-black/50' />
                     }
+                    errorMessage='올바른 생년월일을 입력해주세요.'
+                    onChange={(e) => handleChangeBirthday(e.target.value)}
+                    isInvalid={isBirthdayInvalid}
                   />
                   <Input
                     type='number'
                     fullWidth
                     placeholder='[선택] 클라이밍 시작일 8자리'
                     startContent={<EditIcon className='text-black/50' />}
+                    errorMessage='올바른 날짜를 입력해주세요.'
+                    onChange={(e) => handleChangeFirstDate(e.target.value)}
+                    isInvalid={isFirstDateInvalid}
                   />
                 </div>
               </ModalBody>
               <ModalFooter>
-                <Button color='danger' variant='light' onPress={onClose}>
-                  Close
-                </Button>
-                <Button color='primary' onPress={onClose}>
-                  Action
+                <Button
+                  color='primary'
+                  onPress={onClose}
+                  className='w-full'
+                  onClick={handleModalSubmit}
+                >
+                  회원가입
                 </Button>
               </ModalFooter>
             </>

@@ -1,7 +1,4 @@
-import Post from '@/app/components/post-list';
-import PALETTE from '@/palette';
 import HeadNavbar from '@/app/components/head-navbar';
-import PostList from '@/app/components/post-list';
 import CapsuleInfo from '@/app/components/capsule-info';
 
 export default function Home() {
