@@ -203,6 +203,7 @@ const ModalDetail = ({
   };
 
   const handleModalSubmit = () => {
+    //todo 비어있는 필드에 대한 Alert 추가하기
     //todo 백엔드 가입 페칭
   };
 
