@@ -20,6 +20,7 @@ import {
   SendFilledIcon,
 } from '@nextui-org/shared-icons';
 import { Gugi } from 'next/font/google';
+import { toast } from 'sonner';
 
 const gugi = Gugi({
   subsets: ['latin'],
@@ -29,6 +30,7 @@ const gugi = Gugi({
 export default function SignUp() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordAgain, setPasswordAgain] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPasswordAgainVisible, setIsPasswordAgainVisible] = useState(false);
   const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
@@ -49,9 +51,11 @@ export default function SignUp() {
     setPassword(password);
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,25}$/;
     setIsPasswordInvalid(!passwordRegex.test(password));
+    setIsPasswordAgainInvalid(!(passwordAgain === password));
   };
 
   const handleChangePasswordAgain = (passwordAgain: string) => {
+    setPasswordAgain(passwordAgain);
     setIsPasswordAgainInvalid(!(passwordAgain === password));
   };
 
@@ -62,6 +66,15 @@ export default function SignUp() {
     setIsPasswordAgainVisible(!isPasswordAgainVisible);
 
   const handleSignUpSubmit = () => {
+    if (
+      [isUsernameInvalid, isPasswordInvalid, isPasswordAgainInvalid].some(
+        Boolean,
+      ) ||
+      [username, password, passwordAgain].some((value) => !value)
+    ) {
+      toast.error('모든 값을 입력해주세요.');
+      return;
+    }
     onOpen();
   };
 
