@@ -11,21 +11,9 @@ const gugi = Gugi({
 });
 
 export default function SignIn() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [isVisible, setIsVisible] = useState(false);
-  const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
-  const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
-
-  const handleChangeUsername = (username: string) => {
-    // 4~12 자리, 최소 하나의 영문자와 하나의 숫자 포함
-    const usernameRegex = /^(?=.*[A-Za-z])(?=.*\d).{4,12}$/;
-    setIsUsernameInvalid(!usernameRegex.test(username));
-  };
-
-  const handleChangePassword = (password: string) => {
-    // 8~25 자리, 최소 하나의 영문자와 하나의 숫자 포함
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,25}$/;
-    setIsPasswordInvalid(!passwordRegex.test(password));
-  };
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -43,11 +31,9 @@ export default function SignIn() {
             fullWidth
             label='아이디'
             labelPlacement='inside'
-            errorMessage='영문과 숫자를 포함한 4~12 자리 이어야 합니다.'
             onChange={(e) => {
-              handleChangeUsername(e.target.value);
+              setUsername(e.target.value);
             }}
-            isInvalid={isUsernameInvalid}
           />
           <Input
             label='비밀번호'
@@ -67,11 +53,9 @@ export default function SignIn() {
               </button>
             }
             type={isVisible ? 'text' : 'password'}
-            errorMessage='영문과 숫자를 포함한 8~25 자리 이어야 합니다.'
             onChange={(e) => {
-              handleChangePassword(e.target.value);
+              setPassword(e.target.value);
             }}
-            isInvalid={isPasswordInvalid}
           />
         </div>
         <Button color='primary' onClick={handleSignInSubmit}>
