@@ -1,10 +1,10 @@
 'use client';
 
-import { Input, Button } from '@nextui-org/react';
+import { Button, Input } from '@nextui-org/react';
 import { useState } from 'react';
 import { EyeFilledIcon, EyeSlashFilledIcon } from '@nextui-org/shared-icons';
 import { Gugi } from 'next/font/google';
-import { toast, Toaster } from 'sonner';
+import { toast } from 'sonner';
 
 const gugi = Gugi({
   subsets: ['latin'],
