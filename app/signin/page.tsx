@@ -4,6 +4,7 @@ import { Input, Button } from '@nextui-org/react';
 import { useState } from 'react';
 import { EyeFilledIcon, EyeSlashFilledIcon } from '@nextui-org/shared-icons';
 import { Gugi } from 'next/font/google';
+import { toast, Toaster } from 'sonner';
 
 const gugi = Gugi({
   subsets: ['latin'],
@@ -17,7 +18,13 @@ export default function SignIn() {
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const handleSignInSubmit = () => {};
+  const handleSignInSubmit = () => {
+    if (!(username && password)) {
+      toast.error('모든 값을 입력해주세요.');
+      return;
+    }
+    //todo 로그인 페칭
+  };
 
   return (
     <div className='flex min-h-screen w-full items-center justify-center'>
