@@ -163,7 +163,7 @@ export default function SignUp() {
         </Button>
         <div className='border-lightGray/30 my-[1%] w-full border-[1px]'></div>
         <div className='flex justify-end'>
-          <a href='signin' className='text-sm text-black/50'>
+          <a href='/signin' className='text-sm text-black/50'>
             아이디가 있으신가요?
           </a>
         </div>
