@@ -85,7 +85,7 @@ export default function SignIn() {
         </Button>
         <div className='border-lightGray/30 my-[1%] w-full border-[1px]'></div>
         <div className='flex justify-between'>
-          <a href='signup' className='text-sm text-black/50'>
+          <a href='/signup' className='text-sm text-black/50'>
             회원가입
           </a>
           <a href='#' className='text-sm text-black/50'>
