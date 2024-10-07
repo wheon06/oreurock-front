@@ -26,18 +26,22 @@ export default function SignIn() {
       return;
     }
 
-    const response = await fetcher('/auth/signin', MethodType.POST, {
-      username,
-      password,
-    });
+    try {
+      const response = await fetcher('/auth/signin', MethodType.POST, {
+        username,
+        password,
+      });
 
-    if (response.status === 401)
-      toast.error('아이디 또는 비밀번호를 확인해주세요.');
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      window.location.href = '/';
+      if (response.status === 401)
+        toast.error('아이디 또는 비밀번호를 확인해주세요.');
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('accessToken', data.accessToken);
+        localStorage.setItem('refreshToken', data.refreshToken);
+        window.location.href = '/';
+      }
+    } catch {
+      toast.error('알 수 없는 오류가 발생했습니다.');
     }
   };
 
