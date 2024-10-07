@@ -21,6 +21,8 @@ import {
 } from '@nextui-org/shared-icons';
 import { Gugi } from 'next/font/google';
 import { toast } from 'sonner';
+import fetcher from '@/app/utils/fetcher';
+import MethodType from '@/app/types/method-type';
 
 const gugi = Gugi({
   subsets: ['latin'],
@@ -65,7 +67,7 @@ export default function SignUp() {
   const togglePasswordAgainVisibility = () =>
     setIsPasswordAgainVisible(!isPasswordAgainVisible);
 
-  const handleSignUpSubmit = () => {
+  const handleSignUpSubmit = async () => {
     if (
       [isUsernameInvalid, isPasswordInvalid, isPasswordAgainInvalid].some(
         Boolean,
@@ -75,7 +77,17 @@ export default function SignUp() {
       toast.error('모든 값을 입력해주세요.');
       return;
     }
-    onOpen();
+
+    try {
+      const response = await fetcher('/user/' + username, MethodType.GET);
+      if (response.status === 409) {
+        toast.error('이미 존재하는 아이디입니다.');
+        return;
+      }
+      onOpen();
+    } catch {
+      toast.error('알 수 없는 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -179,39 +191,86 @@ const ModalDetail = ({
   isOpen,
   onOpenChange,
 }: ModalDetailProps) => {
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [birthday, setBirthday] = useState('');
+  const [firstDate, setFirstDate] = useState('');
   const [isPhoneInvalid, setIsPhoneInvalid] = useState(false);
   const [isBirthdayInvalid, setIsBirthdayInvalid] = useState(false);
   const [isFirstDateInvalid, setIsFirstDateInvalid] = useState(false);
 
   const handleChangePhone = (phone: string) => {
     const phoneRegex = /^010\d{8}$/;
+    setPhone(phone);
     setIsPhoneInvalid(!phoneRegex.test(phone));
   };
 
   const handleChangeBirthday = (birthday: string) => {
     const birthdayRegex = /^\d{8}$/;
+    setBirthday(birthday);
     setIsBirthdayInvalid(!birthdayRegex.test(birthday));
   };
 
   const handleChangeFirstDate = (firstDate: string) => {
-    if (firstDate === '') {
+    if (!firstDate) {
       setIsFirstDateInvalid(false);
       return;
     }
     const firstDateRegex = /^\d{8}$/;
-    setIsFirstDateInvalid(!firstDateRegex.test(firstDate));
+    setFirstDate(firstDate);
+    setIsFirstDateInvalid(!firstDateRegex.test(String(firstDate)));
   };
 
-  const handleModalSubmit = () => {
-    //todo 비어있는 필드에 대한 Alert 추가하기
-    //todo 백엔드 가입 페칭
+  const handleModalSubmit = async () => {
+    if (
+      !name ||
+      !phone ||
+      !birthday ||
+      isPhoneInvalid ||
+      isBirthdayInvalid ||
+      isFirstDateInvalid
+    ) {
+      toast.error('모든 값을 입력해주세요.');
+      return;
+    }
+
+    if (birthday && firstDate && Number(firstDate) - Number(birthday) <= 0) {
+      toast.error('태어나기 전부터 클라이밍을 했을리가 없습니다.');
+      return;
+    }
+
+    try {
+      const dto = {
+        username: username,
+        password: password,
+        phone: phone,
+        birthday: birthday,
+        firstDate: firstDate,
+      };
+      const response = await fetcher('/user/join', MethodType.POST, dto);
+      if (response.status === 409) toast.error('이미 존재하는 아이디입니다.');
+      else {
+        onOpenChange(false);
+        setName('');
+        setPhone('');
+        setBirthday('');
+        setFirstDate('');
+        window.location.href = '/signin';
+      }
+    } catch {
+      toast.error('알 수 없는 오류가 발생했습니다.');
+    }
   };
 
   return (
     <>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onClose={() => onOpenChange(false)}
+      >
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalHeader className='flex flex-col gap-1'>
                 추가 정보
@@ -223,6 +282,7 @@ const ModalDetail = ({
                     fullWidth
                     placeholder='이름'
                     startContent={<AvatarIcon className='text-black/50' />}
+                    onChange={(e) => setName(e.target.value)}
                     className='mb-2'
                   />
                   <Input
@@ -259,7 +319,6 @@ const ModalDetail = ({
               <ModalFooter>
                 <Button
                   color='primary'
-                  onPress={onClose}
                   className='w-full'
                   onClick={handleModalSubmit}
                 >
