@@ -1,6 +1,4 @@
 // const BASE_URL = process.env.BASE_URL;
-import { METHODS } from 'node:http';
-import MethodType from '@/app/types/method-type';
 
 const BASE_URL = 'http://localhost:8080';
 
