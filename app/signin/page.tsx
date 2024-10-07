@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { EyeFilledIcon, EyeSlashFilledIcon } from '@nextui-org/shared-icons';
 import { Gugi } from 'next/font/google';
 import { toast } from 'sonner';
+import fetcher from '@/app/utils/fetcher';
+import MethodType from '@/app/types/method-type';
 
 const gugi = Gugi({
   subsets: ['latin'],
@@ -18,12 +20,25 @@ export default function SignIn() {
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const handleSignInSubmit = () => {
+  const handleSignInSubmit = async () => {
     if (!(username && password)) {
       toast.error('모든 값을 입력해주세요.');
       return;
     }
-    //todo 로그인 페칭
+
+    const response = await fetcher('/auth/signin', MethodType.POST, {
+      username,
+      password,
+    });
+
+    if (response.status === 401)
+      toast.error('아이디 또는 비밀번호를 확인해주세요.');
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      window.location.href = '/';
+    }
   };
 
   return (
