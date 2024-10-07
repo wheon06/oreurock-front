@@ -1,4 +1,8 @@
-const BASE_URL = process.env.BASE_URL;
+// const BASE_URL = process.env.BASE_URL;
+import { METHODS } from 'node:http';
+import MethodType from '@/app/types/method-type';
+
+const BASE_URL = 'http://localhost:8080';
 
 export default async function fetcher(
   url: string,
@@ -10,7 +14,7 @@ export default async function fetcher(
   };
 
   try {
-    const response = await fetch(BASE_URL + url, {
+    let response = await fetch(BASE_URL + url, {
       method: method,
       headers: {
         ...defaultHeader,
@@ -19,8 +23,21 @@ export default async function fetcher(
     });
 
     if (response.status === 401) {
-      // refreshToken 재 인증
+      const refreshToken = localStorage.getItem('refreshToken');
+      const refreshRes = await fetch(BASE_URL + '/auth/refreshAccessToken', {
+        headers: { ...defaultHeader, Authorization: 'Bearer ' + refreshToken },
+      });
+      if (refreshRes.status === 401) window.location.href = 'signin';
+      response = await fetch(BASE_URL + url, {
+        method: method,
+        headers: {
+          ...defaultHeader,
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      });
     }
+
+    return response;
   } catch (e) {
     console.error('Fetch Error:' + e);
     throw new Error();
