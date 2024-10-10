@@ -200,12 +200,14 @@ const ModalDetail = ({
   const [isFirstDateInvalid, setIsFirstDateInvalid] = useState(false);
 
   const handleChangePhone = (phone: string) => {
+    // 010 으로 시작해야 하며 총 8자리
     const phoneRegex = /^010\d{8}$/;
     setPhone(phone);
     setIsPhoneInvalid(!phoneRegex.test(phone));
   };
 
   const handleChangeBirthday = (birthday: string) => {
+    // 총 8자리
     const birthdayRegex = /^\d{8}$/;
     setBirthday(birthday);
     setIsBirthdayInvalid(!birthdayRegex.test(birthday));
