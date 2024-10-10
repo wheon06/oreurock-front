@@ -19,18 +19,23 @@ export default async function fetcher(
     });
 
     if (response.status === 401) {
-      const refreshToken = localStorage.getItem('refreshToken');
-      const refreshRes = await fetch(BASE_URL + '/auth/refreshAccessToken', {
-        headers: { ...defaultHeader, Authorization: 'Bearer ' + refreshToken },
-      });
-      if (refreshRes.status === 401) window.location.href = 'signin';
-      response = await fetch(BASE_URL + url, {
-        method: method,
-        headers: {
-          ...defaultHeader,
-        },
-        body: body ? JSON.stringify(body) : undefined,
-      });
+      if (url !== '/auth/signin') {
+        const refreshToken = localStorage.getItem('refreshToken');
+        const refreshRes = await fetch(BASE_URL + '/auth/refreshAccessToken', {
+          headers: {
+            ...defaultHeader,
+            Authorization: 'Bearer ' + refreshToken,
+          },
+        });
+        if (refreshRes.status === 401) window.location.href = 'signin';
+        response = await fetch(BASE_URL + url, {
+          method: method,
+          headers: {
+            ...defaultHeader,
+          },
+          body: body ? JSON.stringify(body) : undefined,
+        });
+      }
     }
 
     return response;
