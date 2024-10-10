@@ -194,10 +194,11 @@ const ModalDetail = ({
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [birthday, setBirthday] = useState('');
-  const [firstDate, setFirstDate] = useState('');
+  const [firstDateClimbing, setFirstDateClimbing] = useState('');
   const [isPhoneInvalid, setIsPhoneInvalid] = useState(false);
   const [isBirthdayInvalid, setIsBirthdayInvalid] = useState(false);
-  const [isFirstDateInvalid, setIsFirstDateInvalid] = useState(false);
+  const [isFirstDateClimbingInvalid, setIsFirstDateClimbingInvalid] =
+    useState(false);
 
   const handleChangePhone = (phone: string) => {
     // 010 으로 시작해야 하며 총 8자리
@@ -213,14 +214,16 @@ const ModalDetail = ({
     setIsBirthdayInvalid(!birthdayRegex.test(birthday));
   };
 
-  const handleChangeFirstDate = (firstDate: string) => {
-    if (!firstDate) {
-      setIsFirstDateInvalid(false);
+  const handleChangefirstDateClimbing = (firstDateClimbing: string) => {
+    if (!firstDateClimbing) {
+      setIsFirstDateClimbingInvalid(false);
       return;
     }
-    const firstDateRegex = /^\d{8}$/;
-    setFirstDate(firstDate);
-    setIsFirstDateInvalid(!firstDateRegex.test(String(firstDate)));
+    const firstDateClimbingRegex = /^\d{8}$/;
+    setFirstDateClimbing(firstDateClimbing);
+    setIsFirstDateClimbingInvalid(
+      !firstDateClimbingRegex.test(String(firstDateClimbing)),
+    );
   };
 
   const handleModalSubmit = async () => {
@@ -230,13 +233,17 @@ const ModalDetail = ({
       !birthday ||
       isPhoneInvalid ||
       isBirthdayInvalid ||
-      isFirstDateInvalid
+      isFirstDateClimbingInvalid
     ) {
       toast.error('모든 값을 입력해주세요.');
       return;
     }
 
-    if (birthday && firstDate && Number(firstDate) - Number(birthday) <= 0) {
+    if (
+      birthday &&
+      firstDateClimbing &&
+      Number(firstDateClimbing) - Number(birthday) <= 0
+    ) {
       toast.error('태어나기 전부터 클라이밍을 했을리가 없습니다.');
       return;
     }
@@ -245,9 +252,10 @@ const ModalDetail = ({
       const dto = {
         username: username,
         password: password,
+        name: name,
         phone: phone,
         birthday: birthday,
-        firstDate: firstDate,
+        firstDateClimbing: firstDateClimbing,
       };
       const response = await fetcher('/user/join', MethodType.POST, dto);
       if (response.status === 409) toast.error('이미 존재하는 아이디입니다.');
@@ -256,7 +264,7 @@ const ModalDetail = ({
         setName('');
         setPhone('');
         setBirthday('');
-        setFirstDate('');
+        setFirstDateClimbing('');
         window.location.href = '/signin';
       }
     } catch {
@@ -313,8 +321,10 @@ const ModalDetail = ({
                     placeholder='[선택] 클라이밍 시작일 8자리'
                     startContent={<EditIcon className='text-black/50' />}
                     errorMessage='올바른 날짜를 입력해주세요.'
-                    onChange={(e) => handleChangeFirstDate(e.target.value)}
-                    isInvalid={isFirstDateInvalid}
+                    onChange={(e) =>
+                      handleChangefirstDateClimbing(e.target.value)
+                    }
+                    isInvalid={isFirstDateClimbingInvalid}
                   />
                 </div>
               </ModalBody>
