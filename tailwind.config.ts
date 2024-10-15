@@ -13,6 +13,23 @@ const config: Config = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
+        grade: {
+          red: '#dd2e44',
+          orange: '#ff7f00',
+          yellow: '#ffd400',
+          lightGreen: '#13ac13',
+          deepGreen: '#0c6e0c',
+          lightBlue: '#77cff2',
+          deepBlue: '#1f3abc',
+          purple: '#813eb6',
+          gray: '#adb5bd',
+        },
+      },
+      screens: {
+        mobile: '320px',
+        tablet: '600px',
+        laptop: '980px',
+        desktop: '1536px',
       },
     },
   },

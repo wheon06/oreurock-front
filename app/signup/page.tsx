@@ -214,7 +214,7 @@ const ModalDetail = ({
     setIsBirthdayInvalid(!birthdayRegex.test(birthday));
   };
 
-  const handleChangefirstDateClimbing = (firstDateClimbing: string) => {
+  const handleChangeFirstDateClimbing = (firstDateClimbing: string) => {
     if (!firstDateClimbing) {
       setIsFirstDateClimbingInvalid(false);
       return;
@@ -322,7 +322,7 @@ const ModalDetail = ({
                     startContent={<EditIcon className='text-black/50' />}
                     errorMessage='올바른 날짜를 입력해주세요.'
                     onChange={(e) =>
-                      handleChangefirstDateClimbing(e.target.value)
+                      handleChangeFirstDateClimbing(e.target.value)
                     }
                     isInvalid={isFirstDateClimbingInvalid}
                   />

@@ -3,19 +3,310 @@
 import { Do_Hyeon } from 'next/font/google';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { Post } from '@/app/types/post-type';
+import palette from '@/app/utils/palette';
 
 export default function PostList() {
-  const [postList, setPostList] = useState<[] | null>([]);
+  const [postList, setPostList] = useState<Post[] | null>([]);
 
   useEffect(() => {
-    setPostList(null);
+    setPostList([
+      {
+        id: 0,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 1,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 2,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+      {
+        id: 3,
+        placeName: '볼더프렌즈 클라이밍',
+        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        best: palette.Purple,
+        author: '이희연',
+        date: '2024-10-15',
+      },
+    ]);
   }, []);
 
   return (
-    <div className='grid grid-cols-4 gap-2'>
+    <div className='laptop:grid-cols-4 mobile:grid-cols-2 tablet:grid-cols-3 grid gap-3'>
       {postList.map((post, index) => (
         <PostItem
-          key={index}
+          key={post.id}
           placeName={post.placeName}
           thumbnail={post.thumbnail}
           best={post.best}
@@ -42,7 +333,7 @@ interface Props {
 
 function PostItem({ placeName, thumbnail, best, author, date }: Props) {
   return (
-    <div className='max-h-80 max-w-60 cursor-pointer bg-white p-1 shadow'>
+    <div className='max-h-80 max-w-60 cursor-pointer rounded-md bg-white p-1 shadow'>
       <div className='mx-auto'>
         <div className='flex'>
           <svg
@@ -69,7 +360,9 @@ function PostItem({ placeName, thumbnail, best, author, date }: Props) {
         <Image src={thumbnail} alt='No image' width={230} height={230} />
         <div className='p-1'>
           <div className='flex items-center gap-1'>
-            <p className='text-sm font-bold text-black/40'>최고 난이도 |</p>
+            <p className='mobile:text-xs text-sm font-bold text-black/40'>
+              최고 난이도 |
+            </p>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               height='16'
@@ -88,11 +381,17 @@ function PostItem({ placeName, thumbnail, best, author, date }: Props) {
                 ></path>
               </g>
             </svg>
-            <p className='text-sm font-bold text-black/40'>(V4)</p>
+            <p className='mobile:text-xs text-sm font-bold text-black/40'>
+              (V4~V5)
+            </p>
           </div>
           <div className='flex max-h-32 justify-between gap-3'>
-            <p className='text-sm font-bold text-blue-500'>{author}</p>
-            <p className='text-sm font-bold text-black/40'>{date}</p>
+            <p className='mobile:text-xs text-sm font-bold text-blue-500'>
+              {author}
+            </p>
+            <p className='mobile:text-xs text-sm font-bold text-black/40'>
+              {date}
+            </p>
           </div>
         </div>
       </div>

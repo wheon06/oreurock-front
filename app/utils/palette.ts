@@ -8,6 +8,7 @@ const PALETTE = {
   DeepBlue: '1f3abc',
   Purple: '813eb6',
   Gray: 'adb5bd',
+  Pink: 'fa8ee5',
 };
 
 export default PALETTE;
