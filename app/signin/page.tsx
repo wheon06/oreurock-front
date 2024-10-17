@@ -46,11 +46,19 @@ export default function SignIn() {
   };
 
   return (
-    <div className='flex min-h-screen w-full items-center justify-center'>
-      <div className='flex h-fit w-[600px] flex-col gap-3 rounded-3xl border-2 p-20'>
+    <div className='flex min-h-screen w-full items-center justify-center bg-white px-10'>
+      <div className='flex h-fit w-[600px] flex-col gap-3 rounded-3xl border-2 p-20 mobile:p-10'>
         <div className='mx-auto flex items-end gap-1'>
-          <h1 className={gugi.className + ' text-5xl'}>오르락</h1>
-          <p className={gugi.className + ' text-md text-black/60'}>OreuRock</p>
+          <h1
+            className={gugi.className + ' text-5xl text-black mobile:text-4xl'}
+          >
+            오르락
+          </h1>
+          <p
+            className={gugi.className + ' text-md text-black/60 mobile:text-sm'}
+          >
+            OreuRock
+          </p>
         </div>
         <div className='flex flex-col gap-2'>
           <Input

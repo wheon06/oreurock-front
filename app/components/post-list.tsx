@@ -3,11 +3,12 @@
 import { Do_Hyeon } from 'next/font/google';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { Post } from '@/app/types/post-type';
+import { PostType } from '@/app/types/post-type';
 import palette from '@/app/utils/palette';
+import { Card, Skeleton } from '@nextui-org/react';
 
 export default function PostList() {
-  const [postList, setPostList] = useState<Post[] | null>([]);
+  const [postList, setPostList] = useState<PostType[]>([]);
 
   useEffect(() => {
     setPostList([
@@ -302,9 +303,38 @@ export default function PostList() {
     ]);
   }, []);
 
+  if (postList?.length === 0) {
+    return (
+      <div className='grid gap-3 px-2 pb-4 mobile:grid-cols-2 tablet:grid-cols-3 laptop:grid-cols-4'>
+        {Array.from({ length: 12 }).map((_, index) => (
+          <Card
+            key={index}
+            className='space-y-5 p-4 shadow mobile:w-[180px] tablet:w-[200px]'
+            radius='lg'
+          >
+            <Skeleton className='rounded-lg'>
+              <div className='h-24 rounded-lg bg-default-300'></div>
+            </Skeleton>
+            <div className='space-y-3'>
+              <Skeleton className='w-3/5 rounded-lg'>
+                <div className='h-3 w-3/5 rounded-lg bg-default-200'></div>
+              </Skeleton>
+              <Skeleton className='w-4/5 rounded-lg'>
+                <div className='h-3 w-4/5 rounded-lg bg-default-200'></div>
+              </Skeleton>
+              <Skeleton className='w-2/5 rounded-lg'>
+                <div className='h-3 w-2/5 rounded-lg bg-default-300'></div>
+              </Skeleton>
+            </div>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div className='laptop:grid-cols-4 mobile:grid-cols-2 tablet:grid-cols-3 grid gap-3'>
-      {postList.map((post, index) => (
+    <div className='grid gap-3 px-2 mobile:grid-cols-2 tablet:grid-cols-3 laptop:grid-cols-4'>
+      {postList?.map((post) => (
         <PostItem
           key={post.id}
           placeName={post.placeName}
@@ -360,7 +390,7 @@ function PostItem({ placeName, thumbnail, best, author, date }: Props) {
         <Image src={thumbnail} alt='No image' width={230} height={230} />
         <div className='p-1'>
           <div className='flex items-center gap-1'>
-            <p className='mobile:text-xs text-sm font-bold text-black/40'>
+            <p className='text-sm font-bold text-black/40 mobile:text-xs'>
               최고 난이도 |
             </p>
             <svg
@@ -381,15 +411,15 @@ function PostItem({ placeName, thumbnail, best, author, date }: Props) {
                 ></path>
               </g>
             </svg>
-            <p className='mobile:text-xs text-sm font-bold text-black/40'>
+            <p className='text-sm font-bold text-black/40 mobile:text-xs'>
               (V4~V5)
             </p>
           </div>
           <div className='flex max-h-32 justify-between gap-3'>
-            <p className='mobile:text-xs text-sm font-bold text-blue-500'>
+            <p className='text-sm font-bold text-blue-500 mobile:text-xs'>
               {author}
             </p>
-            <p className='mobile:text-xs text-sm font-bold text-black/40'>
+            <p className='text-sm font-bold text-black/40 mobile:text-xs'>
               {date}
             </p>
           </div>

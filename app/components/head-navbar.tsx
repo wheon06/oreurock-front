@@ -21,11 +21,11 @@ export default function HeadNavbar() {
           </h2>
         </div>
       </a>
-      <div className='flex gap-5'>
+      <a href='signin' className='flex gap-5'>
         <div className='my-auto flex h-[30px] w-[30px] items-center justify-center rounded-full border-2 border-black/80 text-black/80'>
           <AvatarIcon />
         </div>
-      </div>
+      </a>
     </div>
   );
 }

@@ -9,6 +9,9 @@ const PALETTE = {
   Purple: '813eb6',
   Gray: 'adb5bd',
   Pink: 'fa8ee5',
+  White: 'f2f3f4',
+  Brown: '553830',
+  Black: '000000',
 };
 
 export default PALETTE;

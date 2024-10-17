@@ -11,8 +11,8 @@ export default function Home() {
   return (
     <div className='relative min-h-screen'>
       <HeadNavbar />
-      <div className='mobile:px-5 h-full w-full bg-white px-10'>
-        <div className='mx-auto h-full max-w-4xl overflow-scroll bg-white pt-16'>
+      <div className='h-full w-full bg-white px-10 mobile:px-5'>
+        <div className='mx-auto h-full max-w-4xl overflow-scroll bg-white pt-20'>
           <PostList />
         </div>
         {/*<CapsuleInfo />*/}

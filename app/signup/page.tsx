@@ -91,10 +91,10 @@ export default function SignUp() {
   };
 
   return (
-    <div className='flex min-h-screen w-full items-center justify-center'>
-      <div className='flex h-fit w-[600px] flex-col gap-3 rounded-3xl border-2 px-20 py-10'>
+    <div className='flex min-h-screen w-full items-center justify-center bg-white px-10'>
+      <div className='flex h-fit w-[600px] flex-col gap-3 rounded-3xl border-2 px-20 py-10 mobile:px-10'>
         <div className='flex items-end gap-1'>
-          <h1 className={gugi.className + ' text-3xl'}>오르락</h1>
+          <h1 className={gugi.className + ' text-3xl text-black'}>오르락</h1>
           <p className={gugi.className + ' text-md text-black/60'}>OreuRock</p>
         </div>
         <div className='flex flex-col gap-2'>
