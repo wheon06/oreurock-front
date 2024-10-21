@@ -10,7 +10,10 @@ export default async function fetcher(url: string, method: string, body?: any) {
 
     let response = await fetch(BASE_URL + url, {
       method: method,
-      headers: headers,
+      headers: {
+        ...headers,
+        Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+      },
       body:
         body instanceof FormData
           ? body
@@ -29,6 +32,8 @@ export default async function fetcher(url: string, method: string, body?: any) {
           },
         });
         if (refreshRes.status === 401) window.location.href = 'signin';
+        const data = await refreshRes.json();
+        localStorage.setItem('accessToken', data.accessToken);
 
         // 토큰을 새로고침한 후 원래 요청을 다시 시도
         response = await fetch(BASE_URL + url, {

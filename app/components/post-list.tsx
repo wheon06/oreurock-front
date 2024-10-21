@@ -15,7 +15,7 @@ export default function PostList() {
       {
         id: 0,
         placeName: '볼더프렌즈 클라이밍',
-        thumbnail: 'https://oreurock-bucket.s3.amazonaws.com/IMG_8679.jpg',
+        thumbnail: '/IMG_0072-thumbnail.png',
         best: palette.Purple,
         author: '이희연',
         date: '2024-10-15',
@@ -387,7 +387,13 @@ function PostItem({ placeName, thumbnail, best, author, date }: Props) {
             {placeName}
           </p>
         </div>
-        <Image src={thumbnail} alt='No image' width={230} height={230} />
+        <Image
+          src={thumbnail}
+          alt='No image'
+          width={230}
+          height={230}
+          className='rounded-md'
+        />
         <div className='p-1'>
           <div className='flex items-center gap-1'>
             <p className='text-sm font-bold text-black/40 mobile:text-xs'>

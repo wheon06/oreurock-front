@@ -11,8 +11,9 @@ const useBoardGradeList = () => {
     const fetchBoardGradeListData = async () => {
       const response = await fetcher('/board-grade', MethodType.GET);
       const boardGradeListData = await response.json();
-      console.log(boardGradeListData);
-      setBoardGradeList(boardGradeListData);
+      setBoardGradeList(
+        Array.isArray(boardGradeListData) ? boardGradeListData : [],
+      );
     };
     fetchBoardGradeListData().catch(() => {
       toast.error('알 수 없는 오류가 발생했습니다.');

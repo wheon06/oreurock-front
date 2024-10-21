@@ -5,6 +5,7 @@ import {
   AutocompleteItem,
   Input,
   Button,
+  Spinner,
 } from '@nextui-org/react';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { PostInputDataType } from '@/app/types/post-input-data-type';
@@ -15,9 +16,10 @@ import useBoulderGradeList from '@/app/hooks/use-boulder-grade-list';
 import useBoardGradeList from '@/app/hooks/use-board-grade-list';
 import HeartSvg from '@/app/components/heart-svg';
 import palette from '@/app/utils/palette';
-import MethodType from '@/app/types/method-type';
-import fetcher from '@/app/utils/fetcher';
 import { toast } from 'sonner';
+import fetcher from '@/app/utils/fetcher';
+import MethodType from '@/app/types/method-type';
+import { UserType } from '@/app/types/user-type';
 
 interface BaseGradeType {
   id: number;
@@ -39,6 +41,7 @@ const completeTypes = [
 ];
 
 export default function Post() {
+  const [user, setUser] = useState<UserType | null>(null);
   const { placeList } = usePlaceList();
   const { boulderGradeList, fetchBoulderGradeList } = useBoulderGradeList();
   const { leadGradeList } = useLeadGradeList();
@@ -57,7 +60,7 @@ export default function Post() {
     isCompleted: -1,
     attempt: -1,
   });
-  const [selectFile, setSelectFile] = useState('');
+  const [selectFile, setSelectFile] = useState<File | null>(null);
   const [postInputDataList, setPostInputDataList] = useState<
     {
       placeId: number;
@@ -67,9 +70,10 @@ export default function Post() {
       boardGradeId: number;
       isCompleted: number;
       attempt: number;
-      file: FormData;
+      file: File;
     }[]
   >([]);
+  const [isSubmitDoneLoading, setIsSubmitDoneLoading] = useState(false);
 
   const handlePlaceSelectionChange = (placeKey: Key | null) => {
     const resetCascadeField = () => {
@@ -184,7 +188,7 @@ export default function Post() {
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-
+    console.log(file);
     if (file && file.type.includes('video')) {
       const fileUrl = URL.createObjectURL(file);
       const video = document.createElement('video');
@@ -194,11 +198,12 @@ export default function Post() {
         if (video.duration > 600) {
           toast.error('영상 길이가 10분을 초과합니다.');
         } else {
-          setSelectFile(fileUrl);
+          setSelectFile(file);
         }
         URL.revokeObjectURL(fileUrl);
       });
     }
+    e.target.value = '';
   };
 
   const validateInputData = () => {
@@ -214,17 +219,15 @@ export default function Post() {
       toast.error('값을 모두 입력해주세요');
       return;
     }
-    if (!selectFile) {
-      toast.error('영상을 선택하지 않았어요');
-      return;
-    }
   };
 
   const handleSubmitNext = () => {
-    validateInputData();
-    const blob = new Blob([], { type: 'video/*' });
-    const formData = new FormData();
-    formData.append('file', blob);
+    if (!selectFile) {
+      toast.error('영상을 선택하지 않았어요');
+      return;
+    } else {
+      validateInputData();
+    }
 
     setPostInputDataList((prevList) => [
       ...prevList,
@@ -236,7 +239,7 @@ export default function Post() {
         boardGradeId: postInputData.boardGradeId,
         isCompleted: postInputData.isCompleted,
         attempt: postInputData.attempt,
-        file: formData,
+        file: selectFile,
       },
     ]);
 
@@ -250,13 +253,91 @@ export default function Post() {
       attempt: -1,
     });
 
-    setSelectFile('');
+    setSelectFile(null);
     resetAllKeys();
-    // const response = await fetcher('/climb/file', MethodType.POST, formData);
   };
 
-  const handleSubmitDone = () => {
-    validateInputData();
+  useEffect(() => {
+    const fetchUser = async () => {
+      const response = await fetcher('/auth/authenticate', MethodType.GET);
+      const user = await response.json();
+      setUser(user);
+    };
+
+    fetchUser();
+  }, []);
+
+  const handleSubmitDone = async () => {
+    if (!selectFile) {
+      toast.error('영상을 선택하지 않았어요');
+      return;
+    } else {
+      validateInputData();
+    }
+
+    setIsSubmitDoneLoading(true);
+
+    try {
+      const newPostInputDataList = [
+        ...postInputDataList,
+        {
+          ...postInputData,
+          file: selectFile,
+        },
+      ];
+
+      setPostInputDataList(newPostInputDataList);
+
+      const formData = new FormData();
+
+      newPostInputDataList.forEach((postInputData, index) => {
+        formData.append('file', postInputData.file);
+        formData.append(
+          `inputData[${index}]`,
+          JSON.stringify({
+            placeId: postInputData.placeId,
+            climbType: postInputData.climbType,
+            boulderGradeId: postInputData.boulderGradeId,
+            leadGradeId: postInputData.leadGradeId,
+            boardGradeId: postInputData.boardGradeId,
+            isCompleted: postInputData.isCompleted,
+            attempt: postInputData.attempt,
+          }),
+        );
+      });
+
+      const fetchPromise = fetcher(
+        '/climb/' + user?.id,
+        MethodType.POST,
+        formData,
+      );
+
+      toast.promise(fetchPromise, {
+        loading: '기록을 게시하고 있어요. 조금만 기다려주세요.',
+        success: '성공!',
+        error: '실패',
+      });
+
+      await Promise.all([fetchPromise]);
+    } catch (error) {
+      console.log(error);
+    }
+
+    setPostInputDataList([]);
+
+    setPostInputData({
+      placeId: -1,
+      climbType: 'none',
+      boulderGradeId: -1,
+      leadGradeId: -1,
+      boardGradeId: -1,
+      isCompleted: -1,
+      attempt: -1,
+    });
+    setSelectFile(null);
+    resetAllKeys();
+
+    setIsSubmitDoneLoading(false);
   };
 
   const resetAllKeys = () => {
@@ -266,10 +347,6 @@ export default function Post() {
     setIsCompleteKey('');
     setAttemptKey('');
   };
-
-  useEffect(() => {
-    console.log(postInputDataList);
-  }, [postInputDataList]);
 
   return (
     <div className='min-h-screen'>
@@ -283,12 +360,24 @@ export default function Post() {
                 label={'암장을 선택해주세요'}
                 variant='underlined'
                 className={'max-w-xs'}
+                isDisabled={isSubmitDoneLoading}
+                disabledKeys={['loading']}
                 defaultItems={placeList}
                 selectedKey={placeKey}
                 onSelectionChange={handlePlaceSelectionChange}
               >
-                {(item) => (
-                  <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
+                {placeList.length === 0 ? (
+                  <AutocompleteItem key='loading'>
+                    <div className='flex items-center justify-center'>
+                      <Spinner size='sm' />
+                    </div>
+                  </AutocompleteItem>
+                ) : (
+                  placeList.map((item) => (
+                    <AutocompleteItem key={item.id}>
+                      {item.name}
+                    </AutocompleteItem>
+                  ))
                 )}
               </Autocomplete>
             </div>
@@ -299,7 +388,7 @@ export default function Post() {
                 label={'등반을 선택해주세요'}
                 variant='underlined'
                 className={'max-w-xs'}
-                isDisabled={!placeKey}
+                isDisabled={!placeKey || isSubmitDoneLoading}
                 defaultItems={climbTypes}
                 selectedKey={climbTypeKey}
                 onSelectionChange={handleClimbTypeSelectionChange}
@@ -316,7 +405,8 @@ export default function Post() {
                 label={'난이도를 선택해주세요'}
                 variant='underlined'
                 className={'max-w-xs'}
-                isDisabled={!climbTypeKey}
+                isDisabled={!climbTypeKey || isSubmitDoneLoading}
+                disabledKeys={['loading']}
                 defaultItems={
                   postInputData.climbType === '볼더링'
                     ? (boulderGradeList as BaseGradeType[])
@@ -327,36 +417,45 @@ export default function Post() {
                 selectedKey={gradeKey}
                 onSelectionChange={handleGradeSelectionChange}
               >
-                {(item) => (
-                  <AutocompleteItem
-                    key={item.id}
-                    startContent={
-                      postInputData.climbType === '볼더링' ? (
-                        item.colorGrade?.length === 1 ? (
-                          <div className='w-[25px] rounded border-2 text-center text-black/50'>
-                            {item.colorGrade}
-                          </div>
-                        ) : (
-                          <HeartSvg
-                            height={16}
-                            hex={
-                              palette[
-                                (item.colorGrade as keyof typeof palette) ?? ''
-                              ]
-                            }
-                          />
-                        )
-                      ) : null
-                    }
-                  >
-                    {postInputData.climbType === '볼더링'
-                      ? item.vGrade?.length && item.vGrade.length > 1
-                        ? `${item.vGrade[0]}~${item.vGrade[1]}`
-                        : item.vGrade?.[0] || ''
-                      : postInputData.climbType === '리드'
-                        ? item.yosemiteGrade || ''
-                        : item.vGrade || ''}
+                {boulderGradeList.length === 0 ? (
+                  <AutocompleteItem key='loading'>
+                    <div className='flex items-center justify-center'>
+                      <Spinner size='sm' />
+                    </div>
                   </AutocompleteItem>
+                ) : (
+                  (item) => (
+                    <AutocompleteItem
+                      key={item.id}
+                      startContent={
+                        postInputData.climbType === '볼더링' ? (
+                          item.colorGrade?.length === 1 ? (
+                            <div className='w-[25px] rounded border-2 text-center text-black/50'>
+                              {item.colorGrade}
+                            </div>
+                          ) : (
+                            <HeartSvg
+                              height={16}
+                              hex={
+                                palette[
+                                  (item.colorGrade as keyof typeof palette) ??
+                                    ''
+                                ]
+                              }
+                            />
+                          )
+                        ) : null
+                      }
+                    >
+                      {postInputData.climbType === '볼더링'
+                        ? item.vGrade?.length && item.vGrade.length > 1
+                          ? `${item.vGrade[0]}~${item.vGrade[1]}`
+                          : item.vGrade?.[0] || ''
+                        : postInputData.climbType === '리드'
+                          ? item.yosemiteGrade || ''
+                          : item.vGrade || ''}
+                    </AutocompleteItem>
+                  )
                 )}
               </Autocomplete>
             </div>
@@ -367,7 +466,7 @@ export default function Post() {
                 label={'완등 여부를 선택해주세요'}
                 variant='underlined'
                 className={'max-w-xs'}
-                isDisabled={!gradeKey}
+                isDisabled={!gradeKey || isSubmitDoneLoading}
                 defaultItems={completeTypes}
                 selectedKey={isCompleteKey}
                 onSelectionChange={handleIsCompleteSelectionChange}
@@ -387,7 +486,7 @@ export default function Post() {
                 min={1}
                 max={50}
                 className={'max-w-xs'}
-                isDisabled={!isCompleteKey}
+                isDisabled={!isCompleteKey || isSubmitDoneLoading}
                 value={!isCompleteKey ? '' : attemptKey}
                 onChange={(e) => handleAttemptChange(e.target.value)}
               />
@@ -397,7 +496,7 @@ export default function Post() {
             <div className='h-[350px] w-[350px]'>
               {selectFile ? (
                 <video
-                  src={selectFile}
+                  src={URL.createObjectURL(selectFile)}
                   width={350}
                   height={350}
                   controls
@@ -427,14 +526,20 @@ export default function Post() {
               </div>
               <div className='flex w-full gap-2'>
                 <Button
+                  isDisabled={isSubmitDoneLoading || isSubmitDoneLoading}
                   onClick={() => {
                     handleSubmitDone();
                   }}
                   className='w-[40%] border-2 border-black/10 bg-yellow-200 text-black'
                 >
-                  완료
+                  {isSubmitDoneLoading ? (
+                    <Spinner size='sm' color='default' />
+                  ) : (
+                    '완료'
+                  )}
                 </Button>
                 <Button
+                  isDisabled={isSubmitDoneLoading}
                   onClick={() => {
                     handleSubmitNext();
                   }}
@@ -449,6 +554,7 @@ export default function Post() {
                 id='file-upload-button'
                 onChange={handleFileChange}
                 className='hidden'
+                disabled={isSubmitDoneLoading}
               />
             </div>
           </div>

@@ -11,7 +11,9 @@ const useLeadGradeList = () => {
     const fetchLeadGradeListData = async () => {
       const response = await fetcher('/lead-grade', MethodType.GET);
       const leadGradeListData = await response.json();
-      setLeadGradeList(leadGradeListData);
+      setLeadGradeList(
+        Array.isArray(leadGradeListData) ? leadGradeListData : [],
+      );
     };
 
     fetchLeadGradeListData().catch(() => {
