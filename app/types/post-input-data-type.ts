@@ -1,3 +1,5 @@
+import { DateValue } from '@internationalized/date';
+
 export type PostInputDataType = {
   placeId: number;
   climbType: string;
@@ -6,4 +8,5 @@ export type PostInputDataType = {
   boulderGradeId: number;
   leadGradeId: number;
   boardGradeId: number;
+  date: DateValue;
 };

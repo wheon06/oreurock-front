@@ -19,7 +19,7 @@ export default function Home() {
         {/*<div className='border-lightGray/30 my-[1%] w-full border-[1px]'></div>*/}
       </div>
       <a
-        href='#'
+        href='/post'
         className='fixed bottom-2 left-1/2 w-fit'
         style={{ transform: 'translateX(-50%)' }}
       >

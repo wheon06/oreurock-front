@@ -1,3 +1,5 @@
+import { toast } from 'sonner';
+
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default async function fetcher(url: string, method: string, body?: any) {
@@ -35,10 +37,12 @@ export default async function fetcher(url: string, method: string, body?: any) {
         const data = await refreshRes.json();
         localStorage.setItem('accessToken', data.accessToken);
 
-        // 토큰을 새로고침한 후 원래 요청을 다시 시도
         response = await fetch(BASE_URL + url, {
           method: method,
-          headers: headers,
+          headers: {
+            ...headers,
+            Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+          },
           body:
             body instanceof FormData
               ? body
@@ -52,6 +56,7 @@ export default async function fetcher(url: string, method: string, body?: any) {
     return response;
   } catch (e) {
     console.error('Fetch Error:' + e);
-    throw new Error();
+    toast.error('알 수 없는 오류가 발생했습니다.');
+    window.location.href = '/signin';
   }
 }

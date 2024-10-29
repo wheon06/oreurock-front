@@ -2,7 +2,8 @@ export type PostType = {
   id: number;
   placeName: string;
   thumbnail: string;
-  best: string;
+  colorGrade: string;
+  vGrade: string;
   author: string;
   date: string;
 };

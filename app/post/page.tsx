@@ -1,11 +1,15 @@
 'use client';
-
+//todo 처음으로 고른 암장 다음 기록에서 안바뀌게 고정
 import {
   Autocomplete,
   AutocompleteItem,
   Input,
   Button,
   Spinner,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  DatePicker,
 } from '@nextui-org/react';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { PostInputDataType } from '@/app/types/post-input-data-type';
@@ -20,6 +24,8 @@ import { toast } from 'sonner';
 import fetcher from '@/app/utils/fetcher';
 import MethodType from '@/app/types/method-type';
 import { UserType } from '@/app/types/user-type';
+import { DateValue, getLocalTimeZone, now } from '@internationalized/date';
+import { I18nProvider } from '@react-aria/i18n';
 
 interface BaseGradeType {
   id: number;
@@ -51,6 +57,7 @@ export default function Post() {
   const [gradeKey, setGradeKey] = useState<Key>('');
   const [isCompleteKey, setIsCompleteKey] = useState<Key>('');
   const [attemptKey, setAttemptKey] = useState('');
+  const [isNext, setIsNext] = useState(false);
   const [postInputData, setPostInputData] = useState<PostInputDataType>({
     placeId: -1,
     climbType: 'none',
@@ -59,8 +66,10 @@ export default function Post() {
     boardGradeId: -1,
     isCompleted: -1,
     attempt: -1,
+    date: now(getLocalTimeZone()),
   });
   const [selectFile, setSelectFile] = useState<File | null>(null);
+  const [date, setDate] = useState<DateValue>(now(getLocalTimeZone()));
   const [postInputDataList, setPostInputDataList] = useState<
     {
       placeId: number;
@@ -70,6 +79,7 @@ export default function Post() {
       boardGradeId: number;
       isCompleted: number;
       attempt: number;
+      date: DateValue;
       file: File;
     }[]
   >([]);
@@ -89,6 +99,7 @@ export default function Post() {
         boardGradeId: -1,
         isCompleted: -1,
         attempt: -1,
+        date: now(getLocalTimeZone()),
       }));
     };
 
@@ -217,8 +228,12 @@ export default function Post() {
       postInputData.attempt === -1
     ) {
       toast.error('값을 모두 입력해주세요');
-      return;
+      return false;
+    } else if (postInputData.date > now(getLocalTimeZone())) {
+      toast.error('미래의 기록은 할 수 없어요');
+      return false;
     }
+    return true;
   };
 
   const handleSubmitNext = () => {
@@ -226,7 +241,7 @@ export default function Post() {
       toast.error('영상을 선택하지 않았어요');
       return;
     } else {
-      validateInputData();
+      if (!validateInputData()) return;
     }
 
     setPostInputDataList((prevList) => [
@@ -239,29 +254,39 @@ export default function Post() {
         boardGradeId: postInputData.boardGradeId,
         isCompleted: postInputData.isCompleted,
         attempt: postInputData.attempt,
+        date: now(getLocalTimeZone()),
         file: selectFile,
       },
     ]);
 
     setPostInputData({
-      placeId: -1,
+      placeId: postInputData.placeId,
       climbType: 'none',
       boulderGradeId: -1,
       leadGradeId: -1,
       boardGradeId: -1,
       isCompleted: -1,
       attempt: -1,
+      date: now(getLocalTimeZone()),
     });
 
     setSelectFile(null);
-    resetAllKeys();
+
+    setClimbTypeKey('');
+    setGradeKey('');
+    setIsCompleteKey('');
+    setAttemptKey('');
+
+    setIsNext(true);
   };
 
   useEffect(() => {
     const fetchUser = async () => {
       const response = await fetcher('/auth/authenticate', MethodType.GET);
-      const user = await response.json();
-      setUser(user);
+      if (response) {
+        const user = await response.json();
+        setUser(user);
+      }
     };
 
     fetchUser();
@@ -272,7 +297,7 @@ export default function Post() {
       toast.error('영상을 선택하지 않았어요');
       return;
     } else {
-      validateInputData();
+      if (!validateInputData()) return;
     }
 
     setIsSubmitDoneLoading(true);
@@ -302,6 +327,7 @@ export default function Post() {
             boardGradeId: postInputData.boardGradeId,
             isCompleted: postInputData.isCompleted,
             attempt: postInputData.attempt,
+            date: postInputData.date,
           }),
         );
       });
@@ -333,11 +359,15 @@ export default function Post() {
       boardGradeId: -1,
       isCompleted: -1,
       attempt: -1,
+      date: now(getLocalTimeZone()),
     });
     setSelectFile(null);
     resetAllKeys();
-
+    setIsNext(false);
     setIsSubmitDoneLoading(false);
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 500);
   };
 
   const resetAllKeys = () => {
@@ -360,7 +390,7 @@ export default function Post() {
                 label={'암장을 선택해주세요'}
                 variant='underlined'
                 className={'max-w-xs'}
-                isDisabled={isSubmitDoneLoading}
+                isDisabled={isSubmitDoneLoading || isNext}
                 disabledKeys={['loading']}
                 defaultItems={placeList}
                 selectedKey={placeKey}
@@ -516,13 +546,40 @@ export default function Post() {
               </h2>
             </div>
             <div className='flex flex-col gap-10'>
-              <div>
+              <div className='flex items-end justify-between'>
                 <label
                   htmlFor='file-upload-button'
                   className='rounded-xl border-2 px-5 py-2 hover:bg-black/10'
                 >
                   파일 선택
                 </label>
+                <Popover placement='top' showArrow>
+                  <PopoverTrigger>
+                    <p className='flex h-8 min-w-16 items-center gap-2 px-3 text-tiny underline'>
+                      이전 날짜를 기록하시나요?
+                    </p>
+                  </PopoverTrigger>
+                  <PopoverContent className='p-4'>
+                    <I18nProvider locale='ko-KR'>
+                      <DatePicker
+                        label='날짜를 선택해주세요'
+                        variant='underlined'
+                        labelPlacement='inside'
+                        showMonthAndYearPickers
+                        hideTimeZone
+                        isDisabled={isSubmitDoneLoading}
+                        value={date}
+                        onChange={(e) => {
+                          setDate(e);
+                          setPostInputData((prevData) => ({
+                            ...prevData,
+                            date: e,
+                          }));
+                        }}
+                      />
+                    </I18nProvider>
+                  </PopoverContent>
+                </Popover>
               </div>
               <div className='flex w-full gap-2'>
                 <Button
