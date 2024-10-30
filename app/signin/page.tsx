@@ -32,6 +32,10 @@ export default function SignIn() {
         password,
       });
 
+      if (!response) {
+        toast.error('알 수 없는 오류가 발생했습니다.');
+        return;
+      }
       if (response.status === 401)
         toast.error('아이디 또는 비밀번호를 확인해주세요.');
       if (response.ok) {
