@@ -1,4 +1,14 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  output: 'standalone',
+  images: {
+    domains: [
+      'img.icons8.com',
+      'oreurock-bucket.s3.ap-southeast-2.amazonaws.com',
+    ],
+  },
+};
 
-export default nextConfig;
+import withVideos from 'next-videos';
+
+export default withVideos(nextConfig);

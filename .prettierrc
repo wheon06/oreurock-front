@@ -15,5 +15,5 @@
   "useTabs": false,
   "vueIndentScriptAndStyle": true,
   "rangeStart": 0,
-  "plugins": ["prettier-plugin-tailwind"]
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
