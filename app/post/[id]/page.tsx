@@ -1,5 +1,7 @@
 import { Do_Hyeon } from 'next/font/google';
 import palette from '@/app/utils/palette';
+import React from 'react';
+import Image from 'next/image';
 
 const doHyeon = Do_Hyeon({
   subsets: ['latin'],
@@ -43,7 +45,7 @@ export default function Detail(props: Props) {
             </p>
           </div>
           <div>
-            <img
+            <Image
               src='/no-image.jpg'
               width={500}
               className='rounded-3xl'

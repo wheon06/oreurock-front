@@ -80,11 +80,13 @@ export default function SignUp() {
 
     try {
       const response = await fetcher('/user/' + username, MethodType.GET);
-      if (response.status === 409) {
-        toast.error('이미 존재하는 아이디입니다.');
-        return;
+      if (response) {
+        if (response.status === 409) {
+          toast.error('이미 존재하는 아이디입니다.');
+          return;
+        }
+        onOpen();
       }
-      onOpen();
     } catch {
       toast.error('알 수 없는 오류가 발생했습니다.');
     }
@@ -258,14 +260,16 @@ const ModalDetail = ({
         firstDateClimbing: firstDateClimbing,
       };
       const response = await fetcher('/user/join', MethodType.POST, dto);
-      if (response.status === 409) toast.error('이미 존재하는 아이디입니다.');
-      else {
-        onOpenChange(false);
-        setName('');
-        setPhone('');
-        setBirthday('');
-        setFirstDateClimbing('');
-        window.location.href = '/signin';
+      if (response) {
+        if (response.status === 409) toast.error('이미 존재하는 아이디입니다.');
+        else {
+          onOpenChange(false);
+          setName('');
+          setPhone('');
+          setBirthday('');
+          setFirstDateClimbing('');
+          window.location.href = '/signin';
+        }
       }
     } catch {
       toast.error('알 수 없는 오류가 발생했습니다.');

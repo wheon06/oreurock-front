@@ -10,10 +10,12 @@ const useLeadGradeList = () => {
   useEffect(() => {
     const fetchLeadGradeListData = async () => {
       const response = await fetcher('/lead-grade', MethodType.GET);
-      const leadGradeListData = await response.json();
-      setLeadGradeList(
-        Array.isArray(leadGradeListData) ? leadGradeListData : [],
-      );
+      if (response) {
+        const leadGradeListData = await response.json();
+        setLeadGradeList(
+          Array.isArray(leadGradeListData) ? leadGradeListData : [],
+        );
+      }
     };
 
     fetchLeadGradeListData().catch(() => {
