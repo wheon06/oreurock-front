@@ -2,7 +2,11 @@ import { toast } from 'sonner';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-export default async function fetcher(url: string, method: string, body?: any) {
+export default async function fetcher(
+  url: string,
+  method: string,
+  body?: unknown,
+) {
   try {
     const headers: HeadersInit = {};
     if (body instanceof FormData) {
