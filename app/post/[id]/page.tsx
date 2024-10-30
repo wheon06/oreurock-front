@@ -15,9 +15,10 @@ interface Props {
 export default function Detail(props: Props) {
   return (
     <div className='relative min-h-screen'>
-      <div className='absolute right-[45%] top-[50%] text-3xl'>아직 안만듬</div>
+      <div className='absolute right-[45%] top-[50%] text-3xl'>
+        {'아직 안만듬' + props.params.id}
+      </div>
       <div className='mx-auto flex h-screen max-w-4xl items-center justify-center bg-white'>
-        {/*{props.params.id}*/}
         <div className='flex flex-col gap-2'>
           <div className='flex'>
             <svg

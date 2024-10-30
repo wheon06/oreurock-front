@@ -1,13 +1,11 @@
 'use client';
 
 import HeadNavbar from '@/app/components/head-navbar';
-import { Button, useDisclosure } from '@nextui-org/react';
+import { Button } from '@nextui-org/react';
 import PostList from '@/app/components/post-list';
 import React from 'react';
 
 export default function Home() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
   return (
     <div className='relative min-h-screen bg-white'>
       <HeadNavbar />
@@ -15,8 +13,6 @@ export default function Home() {
         <div className='mx-auto h-full max-w-4xl overflow-scroll bg-white pt-20'>
           <PostList />
         </div>
-        {/*<CapsuleInfo />*/}
-        {/*<div className='border-lightGray/30 my-[1%] w-full border-[1px]'></div>*/}
       </div>
       <a
         href='/post'
