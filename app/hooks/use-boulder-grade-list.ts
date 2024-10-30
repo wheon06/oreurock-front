@@ -16,10 +16,12 @@ const useBoulderGradeList = () => {
         '/boulder-grade/' + placeId,
         MethodType.GET,
       );
-      const boulderGradeListData = await response.json();
-      const mappedBoulderGradeListData =
-        mapBoulderGradeList(boulderGradeListData);
-      setBoulderGradeList(mappedBoulderGradeListData);
+      if (response) {
+        const boulderGradeListData = await response.json();
+        const mappedBoulderGradeListData =
+          mapBoulderGradeList(boulderGradeListData);
+        setBoulderGradeList(mappedBoulderGradeListData);
+      }
     } catch {
       toast.error('알 수 없는 오류가 발생했습니다.');
     }
