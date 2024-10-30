@@ -380,17 +380,22 @@ export default function Post() {
   };
 
   return (
-    <div className='min-h-screen'>
-      <div className='mx-auto flex h-screen max-w-4xl items-center justify-center bg-white'>
-        <div className='flex gap-10'>
-          <div className='flex flex-col gap-10'>
+    <div className='min-h-screen bg-white'>
+      <div className='mx-auto flex max-w-4xl items-center justify-center bg-white laptop:h-screen'>
+        <div className='flex mobile:flex-col mobile:pt-10 laptop:flex-row laptop:gap-10 laptop:pt-0'>
+          <div className='flex flex-col items-center justify-center gap-10'>
             {/*암벽장 선택*/}
-            <div>
-              <h2 className='text-lg font-semibold'>장소를 선택해주세요</h2>
+            <div className='w-[320px]'>
+              <h2 className='text-lg font-semibold text-black'>
+                장소를 선택해주세요
+              </h2>
               <Autocomplete
                 label={'암장을 선택해주세요'}
                 variant='underlined'
                 className={'max-w-xs'}
+                inputProps={{
+                  classNames: { input: ['!text-black'] },
+                }}
                 isDisabled={isSubmitDoneLoading || isNext}
                 disabledKeys={['loading']}
                 defaultItems={placeList}
@@ -405,7 +410,7 @@ export default function Post() {
                   </AutocompleteItem>
                 ) : (
                   placeList.map((item) => (
-                    <AutocompleteItem key={item.id}>
+                    <AutocompleteItem key={item.id} className='text-black'>
                       {item.name}
                     </AutocompleteItem>
                   ))
@@ -413,29 +418,41 @@ export default function Post() {
               </Autocomplete>
             </div>
             {/*등반 종류 선택*/}
-            <div>
-              <h2 className='text-lg font-semibold'>어떤 등반을 하셨나요?</h2>
+            <div className='w-[320px]'>
+              <h2 className='text-lg font-semibold text-black'>
+                어떤 등반을 하셨나요?
+              </h2>
               <Autocomplete
                 label={'등반을 선택해주세요'}
                 variant='underlined'
                 className={'max-w-xs'}
+                inputProps={{
+                  classNames: { input: ['!text-black'] },
+                }}
                 isDisabled={!placeKey || isSubmitDoneLoading}
                 defaultItems={climbTypes}
                 selectedKey={climbTypeKey}
                 onSelectionChange={handleClimbTypeSelectionChange}
               >
                 {(item) => (
-                  <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
+                  <AutocompleteItem key={item.id} className='text-black'>
+                    {item.name}
+                  </AutocompleteItem>
                 )}
               </Autocomplete>
             </div>
             {/*그레이드 선택*/}
-            <div>
-              <h2 className='text-lg font-semibold'>난이도를 선택해주세요</h2>
+            <div className='w-[320px]'>
+              <h2 className='text-lg font-semibold text-black'>
+                난이도를 선택해주세요
+              </h2>
               <Autocomplete
                 label={'난이도를 선택해주세요'}
                 variant='underlined'
                 className={'max-w-xs'}
+                inputProps={{
+                  classNames: { input: ['!text-black'] },
+                }}
                 isDisabled={!climbTypeKey || isSubmitDoneLoading}
                 disabledKeys={['loading']}
                 defaultItems={
@@ -458,6 +475,7 @@ export default function Post() {
                   (item) => (
                     <AutocompleteItem
                       key={item.id}
+                      className='text-black'
                       startContent={
                         postInputData.climbType === '볼더링' ? (
                           item.colorGrade?.length === 1 ? (
@@ -491,32 +509,41 @@ export default function Post() {
               </Autocomplete>
             </div>
             {/*완등 여부 선택*/}
-            <div>
-              <h2 className='text-lg font-semibold'>완등 하셨나요?</h2>
+            <div className='w-[320px]'>
+              <h2 className='text-lg font-semibold text-black'>
+                완등 하셨나요?
+              </h2>
               <Autocomplete
                 label={'완등 여부를 선택해주세요'}
                 variant='underlined'
                 className={'max-w-xs'}
+                inputProps={{
+                  classNames: { input: ['!text-black'] },
+                }}
                 isDisabled={!gradeKey || isSubmitDoneLoading}
                 defaultItems={completeTypes}
                 selectedKey={isCompleteKey}
                 onSelectionChange={handleIsCompleteSelectionChange}
               >
                 {(item) => (
-                  <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
+                  <AutocompleteItem key={item.id} className='text-black'>
+                    {item.name}
+                  </AutocompleteItem>
                 )}
               </Autocomplete>
             </div>
             {/*시도 횟수 선택*/}
-            <div>
-              <h2 className='text-lg font-semibold'>몇 번 시도 하셨나요?</h2>
+            <div className='w-[320px]'>
+              <h2 className='text-lg font-semibold text-black'>
+                몇 번 시도 하셨나요?
+              </h2>
               <Input
                 label={'시도 횟수를 입력해주세요'}
                 variant='underlined'
                 type='number'
                 min={1}
                 max={50}
-                className={'max-w-xs'}
+                classNames={{ base: 'max-w-xs', input: '!text-black' }}
                 isDisabled={!isCompleteKey || isSubmitDoneLoading}
                 value={!isCompleteKey ? '' : attemptKey}
                 onChange={(e) => handleAttemptChange(e.target.value)}
@@ -549,7 +576,7 @@ export default function Post() {
               )}
             </div>
             <div>
-              <h2 className='text-lg font-semibold'>
+              <h2 className='text-lg font-semibold text-black'>
                 🎥 등반 영상을 올려주세요!
               </h2>
             </div>
@@ -557,13 +584,13 @@ export default function Post() {
               <div className='flex items-end justify-between'>
                 <label
                   htmlFor='file-upload-button'
-                  className='rounded-xl border-2 px-5 py-2 hover:bg-black/10'
+                  className='rounded-xl border-2 px-5 py-2 text-black hover:bg-black/10'
                 >
                   파일 선택
                 </label>
                 <Popover placement='top' showArrow>
                   <PopoverTrigger>
-                    <p className='flex h-8 min-w-16 items-center gap-2 px-3 text-tiny underline'>
+                    <p className='flex h-8 min-w-16 items-center gap-2 px-3 text-tiny text-black underline'>
                       이전 날짜를 기록하시나요?
                     </p>
                   </PopoverTrigger>

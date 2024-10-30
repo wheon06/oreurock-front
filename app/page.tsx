@@ -9,7 +9,7 @@ export default function Home() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
-    <div className='relative min-h-screen'>
+    <div className='relative min-h-screen bg-white'>
       <HeadNavbar />
       <div className='h-full w-full bg-white px-10 mobile:px-5'>
         <div className='mx-auto h-full max-w-4xl overflow-scroll bg-white pt-20'>
