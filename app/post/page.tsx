@@ -26,6 +26,7 @@ import MethodType from '@/app/types/method-type';
 import { UserType } from '@/app/types/user-type';
 import { DateValue, getLocalTimeZone, now } from '@internationalized/date';
 import { I18nProvider } from '@react-aria/i18n';
+import Image from 'next/image';
 
 interface BaseGradeType {
   id: number;
@@ -535,8 +536,15 @@ export default function Post() {
                   className='h-full rounded-3xl shadow-2xl'
                 />
               ) : (
-                <div className='flex h-full w-full items-center justify-center rounded-3xl bg-gray-100 shadow-2xl'>
-                  영상 넣어!
+                <div className='flex h-full w-full items-center justify-center gap-1 rounded-3xl bg-gray-100 shadow-2xl'>
+                  <Image
+                    src='/mococo-40.png'
+                    alt='mococo'
+                    width={150}
+                    height={150}
+                    className='absolute rounded-2xl opacity-20'
+                  />
+                  {/*<p className='absolute'>영상 넣어!</p>*/}
                 </div>
               )}
             </div>
