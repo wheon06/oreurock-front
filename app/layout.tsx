@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import { Toaster } from 'sonner';
@@ -18,6 +18,14 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: '오르락 OreuRock',
   description: '나만의 클라이밍 다이어리',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1.0,
+  minimumScale: 1.0,
+  maximumScale: 1.0,
+  userScalable: false,
 };
 
 export default function RootLayout({

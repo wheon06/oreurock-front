@@ -14,9 +14,10 @@ interface Props {
 
 export default function Detail(props: Props) {
   return (
-    <div className='min-h-screen'>
+    <div className='relative min-h-screen'>
+      <div className='absolute right-[45%] top-[50%] text-3xl'>아직 안만듬</div>
       <div className='mx-auto flex h-screen max-w-4xl items-center justify-center bg-white'>
-        {props.params.id}
+        {/*{props.params.id}*/}
         <div className='flex flex-col gap-2'>
           <div className='flex'>
             <svg
@@ -41,7 +42,12 @@ export default function Detail(props: Props) {
             </p>
           </div>
           <div>
-            <video src='/IMG_0072.MOV' width={500} className='rounded-3xl' />
+            <img
+              src='/no-image.jpg'
+              width={500}
+              className='rounded-3xl'
+              alt='temp'
+            />
           </div>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-1'>
