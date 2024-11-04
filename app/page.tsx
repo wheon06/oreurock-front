@@ -10,7 +10,7 @@ export default function Home() {
     <div className='relative min-h-screen bg-white'>
       <HeadNavbar />
       <div className='h-full w-full bg-white px-10 mobile:px-5'>
-        <div className='mx-auto h-full max-w-4xl overflow-scroll bg-white pt-20'>
+        <div className='mx-auto h-full max-w-4xl bg-white pt-20'>
           <PostList />
         </div>
       </div>

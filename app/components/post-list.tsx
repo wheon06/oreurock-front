@@ -15,6 +15,7 @@ import palette from '@/app/utils/palette';
 
 export default function PostList() {
   const [postList, setPostList] = useState<PostType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAllPost = async () => {
@@ -63,13 +64,15 @@ export default function PostList() {
       } catch (error) {
         console.error(error);
         toast.error('알 수 없는 오류가 발생했습니다.');
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchAllPost();
   }, []);
 
-  if (postList?.length === 0) {
+  if (isLoading) {
     return (
       <div className='grid gap-3 px-2 pb-4 mobile:grid-cols-2 tablet:grid-cols-3 laptop:grid-cols-4'>
         {Array.from({ length: 12 }).map((_, index) => (
@@ -96,6 +99,10 @@ export default function PostList() {
         ))}
       </div>
     );
+  }
+
+  if (postList.length === 0) {
+    return <div className='text-center'>기록한 운동이 없습니다.</div>;
   }
 
   return (
