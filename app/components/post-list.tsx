@@ -2,82 +2,17 @@
 
 import { Do_Hyeon } from 'next/font/google';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { PostType } from '@/app/types/post-type';
-import { Card, Skeleton } from '@nextui-org/react';
-import fetcher from '@/app/utils/fetcher';
-import MethodType from '@/app/types/method-type';
-import { toast } from 'sonner';
-import { PostFetchType } from '@/app/types/post-fetch-type';
-import elapsedTime from '@/app/utils/elapsed-time';
-import { UserDetailFetchType } from '@/app/types/user-detail-fetch-type';
 import palette from '@/app/utils/palette';
-import { PostListSkeleton } from '@/app/fonts/post-list-skeleton';
+import { PostListSkeleton } from '@/app/components/post-list-skeleton';
+import { usePostList } from '@/app/hooks/use-post-list';
 
 export default function PostList() {
-  const [postList, setPostList] = useState<PostType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchAllPost = async () => {
-      try {
-        const response = await fetcher('/post', MethodType.GET);
-
-        if (response && response.ok) {
-          const postDataListUnsorted: PostFetchType[] = await response.json();
-          const postDataList = postDataListUnsorted.sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-          );
-
-          const uniqueUserIds = [
-            ...new Set(postDataList.map((postData) => postData.userId)),
-          ];
-
-          const userResponse = await fetcher(
-            '/user-detail',
-            MethodType.POST,
-            uniqueUserIds,
-          );
-
-          if (userResponse && userResponse.ok) {
-            const userDataList: UserDetailFetchType[] =
-              await userResponse.json();
-            const userDataMap = Object.fromEntries(
-              userDataList.map((user) => [user.id, user]),
-            );
-
-            const formattedPostDataList = postDataList.map(
-              (postData): PostType => ({
-                id: postData.id,
-                placeName: postData.placeName,
-                thumbnail: postData.thumbnailUrl,
-                colorGrade: postData.colorGrade,
-                vGrade: postData.vGrade,
-                author: userDataMap[postData.userId]?.name || 'Unknown',
-                date: elapsedTime(postData.createdAt),
-              }),
-            );
-
-            setPostList(formattedPostDataList);
-          }
-        }
-      } catch (error) {
-        console.error(error);
-        toast.error('알 수 없는 오류가 발생했습니다.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAllPost();
-  }, []);
+  const { postList, isLoading } = usePostList();
 
   if (isLoading) return <PostListSkeleton />;
 
-  if (postList.length === 0) {
+  if (postList.length === 0)
     return <div className='text-center'>기록한 운동이 없습니다.</div>;
-  }
 
   return (
     <div className='grid gap-3 px-2 pb-2 mobile:grid-cols-2 tablet:grid-cols-3 laptop:grid-cols-4'>
