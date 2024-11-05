@@ -12,6 +12,7 @@ import { PostFetchType } from '@/app/types/post-fetch-type';
 import elapsedTime from '@/app/utils/elapsed-time';
 import { UserDetailFetchType } from '@/app/types/user-detail-fetch-type';
 import palette from '@/app/utils/palette';
+import { PostListSkeleton } from '@/app/fonts/post-list-skeleton';
 
 export default function PostList() {
   const [postList, setPostList] = useState<PostType[]>([]);
@@ -72,34 +73,7 @@ export default function PostList() {
     fetchAllPost();
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className='grid gap-3 px-2 pb-4 mobile:grid-cols-2 tablet:grid-cols-3 laptop:grid-cols-4'>
-        {Array.from({ length: 12 }).map((_, index) => (
-          <Card
-            key={index}
-            className='space-y-5 p-4 shadow mobile:w-[180px] tablet:w-[200px]'
-            radius='lg'
-          >
-            <Skeleton className='rounded-lg'>
-              <div className='h-24 rounded-lg bg-default-300'></div>
-            </Skeleton>
-            <div className='space-y-3'>
-              <Skeleton className='w-3/5 rounded-lg'>
-                <div className='h-3 w-3/5 rounded-lg bg-default-200'></div>
-              </Skeleton>
-              <Skeleton className='w-4/5 rounded-lg'>
-                <div className='h-3 w-4/5 rounded-lg bg-default-200'></div>
-              </Skeleton>
-              <Skeleton className='w-2/5 rounded-lg'>
-                <div className='h-3 w-2/5 rounded-lg bg-default-300'></div>
-              </Skeleton>
-            </div>
-          </Card>
-        ))}
-      </div>
-    );
-  }
+  if (isLoading) return <PostListSkeleton />;
 
   if (postList.length === 0) {
     return <div className='text-center'>기록한 운동이 없습니다.</div>;

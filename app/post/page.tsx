@@ -1,5 +1,5 @@
 'use client';
-//todo 처음으로 고른 암장 다음 기록에서 안바뀌게 고정
+
 import {
   Autocomplete,
   AutocompleteItem,
